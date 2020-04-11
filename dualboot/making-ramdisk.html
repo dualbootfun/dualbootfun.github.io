@@ -1,0 +1,34 @@
+<html>
+    <link rel="stylesheet" href="general.css"></br>
+        <meta charset="Unicode">
+            <head>
+                <title>Dual Booting 64 Bit devices</title>
+            </head>
+<body>
+<div>
+    <h2>Making custom ramdisk</h2>
+    <p>Unfortunately there is no way of restoring our inverted image if disk0 is mounted, so we have to use a custom ramdisk.</br>
+    <h3> Patching AMFI </h3>
+    <p>We need to patch amfi in kernel to make the ramdisk load custom binaries.
+    Unpack the kernelcache:
+    <p class="cli">img4 -i kernelcache.* -o kcache.raw</p>
+    And load it in IDA (or your disassembler) as ARM Little Endian. </br>
+    Search "entitlements too small" string and jump to its Data XREF.</br>
+    </br><img class="align" src="images/Image1.png"></br>
+    </br>We need to look for next MOV X0,X24 instruction and double click on the next BL (7DA75C8 in this case).</br>
+    </br></br><img class="align" src="images/Image2.png"></br>
+    </br>Change STP X29,X30 and MOV X29,SP instructions to MOV W0,#1 and RET instructions</br>
+    </br><img class="align" src="images/Image3.png"></br>
+    </br>Apply patches to kernelcache, compress it back lzss and pack it into img4
+    <p class="cli">relzss kcache.raw kcache.lzss</p>
+    <p class="cli">img4 -i kcache.lzss -o kernelcache -M IM4M -A -T rkrn</p>
+    Now add bash binary and needed libs and change restored_external with a script that will execute apfs_invert</br>
+    <img class="align" src="images/Image4.png"></br>
+    That's how it will look.</br>
+    If you did everything correctly ramdisk should boot and run apfs_invert (don’t forget to send trust cache on iOS 12+).</br>
+    </br><img class="limit" src="images/Image5.jpeg"></br></br>
+        <center>Next part → <a href="modifying-filesystem.html" class="link"></b>Modifying filesystem</a></center></br>
+</p>
+</div>
+</body>
+</html>

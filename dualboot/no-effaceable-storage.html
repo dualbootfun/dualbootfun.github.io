@@ -1,0 +1,34 @@
+<html>
+    <link rel="stylesheet" href="general.css"></br>
+        <meta charset="Unicode">
+            <head>
+                <title>Dual Booting 64 Bit devices</title>
+            </head>
+<body>
+<div>
+    <h2>no-effaceable-storage</h2>
+    <p>Dual booted OS is almost ready to boot, we just need to generate a keybag or copy it.
+    If you choose to copy it, you won’t be able to set a passcode, if you’ll do it, effaceable keys will be regenerated and first OS won’t boot anymore (so you’ll need to restore the device). </p>
+    <p class="cli">cp -av /var/keybags /mnt2</p>
+    <p>If you choose to generate it, continue here.<p>
+    <h3>Patching devicetree</h3>
+    We need to add no-effaceable-storage property.</br>
+    <img class="align" src="images/Image7.png"></br>
+        Check "use-lwvm" property and add no-effaceable-storage property above it.</br>
+        <img class="align" src="images/Image8.png"></br>
+            I replaced “supported-legacy-panic-flow” instead of adding it, but it’s better adding it.</p>
+<h3>Adding fixkeybag</h3>
+<p>Thanks to @nyan_satan for this technique.
+We’ll make our keybag generate when booting for first time: compile fixkeybag for arm64 and put it in / of disk0s1s3 (don’t forget to sign it using ldid for iOS 10, ldid2 for iOS 11+).
+Save original keybagd, sign fixkeybag and replace it with fixkeybag
+<p class="cli">mv /mnt1/usr/libexec/keybagd /mnt1/usr/libexec/keybagd_bak</p>
+<p class="cli">mv /mnt1/fixkeybag /mnt1/usr/libexec/com.apple.keybagd</p>
+<p class="cli">ldid -S /mnt1/usr/libexec/com.apple.keybagd</p>
+<p class="cli">mv /mnt1/usr/libexec/com.apple.keybagd /mnt1/usr/libexec/keybagd</p>
+
+Second system is ready to boot. Now we have to patch bootchain and boot it.</p>
+
+<center>Next part → <a href="first-boot.html" class="link"></b>First boot</a></center></br>
+</div>
+</body>
+</html>

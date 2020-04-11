@@ -1,0 +1,38 @@
+<html>
+    <link rel="stylesheet" href="general.css"></br>
+        <meta charset="Unicode">
+            <head>
+                <title>Dual Booting 64 Bit devices</title>
+            </head>
+        <body>
+<div>
+    <h3>Partitioning</h3>
+    <p>With the introduction of APFS in iOS 10.3, Apple made partitioning much easier. In contrast to HFS+, This uses something called a<br />
+    container. It is much more efficient, and there is no limit to the amount of partitions that can be created. And, unless specified, new<br />
+    volumes are dynamic and do not have a set size; rather they are allowed to share free space within the container itself.<p>
+    <p>In this case, we are just going to add new volumes to the container, /dev/disk0s1:
+    
+    <p class="cli">newfs_apfs -A -v System /dev/disk0s1</p>
+    <p class="cli">newfs_apfs -A -v Data /dev/disk0s1</p>
+    Done!</br> </br>
+    Mount new system partition (/dev/disk0s1s3) to /mnt1:
+    <p class="cli">mkdir /mnt1 /mnt2</p>
+    <p class="cli">mount_apfs /dev/disk0s1s3 /mnt1</p></p>
+    
+    <h3>Restoring RootFS</h3>
+    <p>APFS changed the way Apple handles restoring root filesystem images. It is no longer possible to directly restore images to the target partition.
+    Rather, asr is run in a ramdisk to create something called an inverted asr image, which the apfs_invert binary flashes to the new partition.
+    
+    
+    Run asr on macOS to create an invertible asr image: </p>
+    <p class="cli">asr -source rootfs.dmg -target out.dmg --embed -erase -noprompt --chunkchecksum --puppetstrings</p>
+    
+    
+    <p>Make sure iproxy is running. This can also be done over network instead of iproxy, but it will be much slower.<p>
+    <p class="cli">iproxy 2222 22</p>
+    <p>then copy the out file to / of new system partition using scp.</p>
+    <p class="cli">scp -P 2222 out.dmg root@localhost:/mnt1</p>
+    <center>Next part → <a href="making-ramdisk.html" class="link"></b>Making ramdisk</a></center></br>
+</div>
+</body>
+</html>

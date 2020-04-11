@@ -1,0 +1,33 @@
+<html>
+    <link rel="stylesheet" href="general.css"></br>
+        <meta charset="Unicode">
+            <head>
+                <title>Dual Booting 64 Bit devices</title>
+            </head>
+<body>
+<div>
+<h2>First boot</h2>
+Decrypt iBSS and iBEC:
+<p class="cli">img4 -i iBSS.* -o iBSS.dec iv_key</p>
+<p class="cli">img4 -i iBEC.* -o iBEC.dec iv_key</p>
+Patch signature checks and add rd=disk0s1s3 and -v args to iBEC:
+<p class="cli">iBoot64Patcher iBSS.dec iBSS.patched</p>
+<p class="cli">iBoot64Patcher iBEC.dec iBEC.patched -b “rd=disk0s1s3 -v”</p>
+
+Now pack them back into img4: (Keep in mind IM4M is your shsh2 file.)
+<p class="cli">img4 -i iBSS.patched -o iBSS.img4 -M IM4M -A -T ibss”</p>
+<p class="cli">img4 -i iBEC.patched -o iBEC.img4 -M IM4M -A -T ibec</p>
+
+Sign DeviceTree,kernelcache,applelogo and trustchache (on iOS 12+) using same apticket.</b>
+Put your iPhone into pwned dfu and boot using irecovery.</br>
+
+If you see “AppleKeyStore: disabling use of effaceable storage, using fake key”,in verbose output, you can reboot to first system.</br>
+<img class="align" src="images/Image9.png"></br>
+    
+    Now mount disk0s1s3 and put keybagd in its original place:
+    <p class="cli">mv /mnt1/usr/libexec/keybagd_bak /mnt1/usr/libexec/keybagd</p>
+    We’re done. If you’ve done everything correctly the device should boot in the next boot.</p>
+    <center><a href="index.html" class="link"></b>Dual Booting 64 Bit</a></center></br>
+</div>
+</body>
+</html>
