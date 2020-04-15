@@ -5,20 +5,20 @@
                 <title>Dual Booting 64 Bit devices</title>
             </head>
 <body>
-<div>
+<div class="page">
 <h2>Modifying filesystem</h2>
 Modify fstab using nano:
 <p class="cli">cp -av /etc/fstab /mnt1/etc/fstab</p>
 <p class="cli">nano /mnt1/etc/fstab</p>
 <img class="align" src="images/Image6.png"></br>
-    Change disk0s1s1 to disk0s1s3, and disk0s1s2 to disk0s1s4.</br>
+    Change disk0s1s1 to disk0s1s3 and disk0s1s2 to disk0s1s4. (or the new system and data partitions disks based on the device.)</br>
     Press CTRL-O to save and CTRL-X to exit.
     
     <p>Now we have to add SEP to the second system:</br>
-    <p class="cli">cp -av /usr/standalone/firmware/sep* /mnt1/usr/standalone</p>
+    <p class="cli">cp -a /usr/standalone/firmware/sep* /mnt1/usr/standalone</p>
     <p>Also add the baseband firmware:</br>
     <p class="cli">cp -av /usr/local /mnt1/usr/local</p>
-    <p>The baseband is located inside of /usr/local, and the firmware names vary across devices. we can just copy it since the /usr/local path does not exist on the new system.<p>
+    <p>The baseband is located inside of /usr/local, and the firmware names vary across devices. We can just copy it since the /usr/local path does not exist on the new system.<p>
     
     <h2>Modifying data partition</h2>
     <p>Now we have to mount system and move /private/var to new partition:

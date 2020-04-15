@@ -5,24 +5,69 @@
                 <title>Dual Booting 64 Bit devices</title>
             </head>
 <body>
-<div>
+<div class="page">
 <h2>First boot</h2>
+
 Decrypt iBSS and iBEC:
 <p class="cli">img4 -i iBSS.* -o iBSS.dec iv_key</p>
 <p class="cli">img4 -i iBEC.* -o iBEC.dec iv_key</p>
-Patch signature checks and add rd=disk0s1s3 and -v args to iBEC:
+
+And patch signature checks using iBoot64Patcher:
+
 <p class="cli">iBoot64Patcher iBSS.dec iBSS.patched</p>
+
+If you are booting the custom ramdisk, patch signature checks and add -v arg to iBEC:
+<p class="cli">iBoot64Patcher iBEC.dec iBEC.patched -b “rd=md0 nand-enable-reformat=1 -restore -v”</p>
+	
+Otherwise, for booting the second iOS install, iBEC needs an arg which will point it towards the new partition.
+Add rd=disk0s1s3 (or your new system partition disk) and -v args to iBEC:
 <p class="cli">iBoot64Patcher iBEC.dec iBEC.patched -b “rd=disk0s1s3 -v”</p>
 
-Now pack them back into img4: (Keep in mind IM4M is your shsh2 file.)
-<p class="cli">img4 -i iBSS.patched -o iBSS.img4 -M IM4M -A -T ibss”</p>
+</br><img class="align" src="images/Image9.png"></br>
+
+Now pack them back into img4: 
+
+<p class="cli">img4 -i iBSS.patched -o iBSS.img4 -M IM4M -A -T ibss</p>
 <p class="cli">img4 -i iBEC.patched -o iBEC.img4 -M IM4M -A -T ibec</p>
 
-Sign DeviceTree,kernelcache,applelogo and trustchache (on iOS 12+) using same apticket.</b>
-Put your iPhone into pwned dfu and boot using irecovery.</br>
+For booting the second OS, Sign stock kernelcache ,applelogo and trustcache (on iOS 12+) using same apticket:</b>
+<p class="cli">img4 -i *.im4p -o *.img4 -M IM4M</p>
 
-If you see “AppleKeyStore: disabling use of effaceable storage, using fake key”,in verbose output, you can reboot to first system.</br>
-<img class="align" src="images/Image9.png"></br>
+Note: you can find trustcache name in BuildManifest.plist</br>
+</br><img class="align" src="images/Image10.png"></br>
+
+</br>Pack devicetree into img4 with rdtr (RestoreDevicetree) tag. The devicetree needs this tag, otherwise iBEC will refuse to see it as valid:
+<p class="cli">img4 -i devicetree.raw -o devicetree.img4 -M IM4M -T rdtr</p>
+
+Done!</br>
+
+</br>It's finally time to put the iPhone into pwned dfu and boot using irecovery:</br>
+
+<p>Send iBSS, along with iBEC:<p>
+<p class="cli">irecovery -f iBSS.img4</p>
+<p class="cli">irecovery -f iBEC.img4</p>
+
+If you are booting the ramdisk, send it and use ramdisk command to load it:
+<p class="cli">irecovery -f ramdisk</p>
+<p class="cli">irecovery -c ramdisk</p>
+
+Load devicetree:
+
+<p class="cli">irecovery -f devicetree.img4</p>
+<p class="cli">irecovery -c devicetree.img4</p>
+
+<p>Send trustcache if needed:<p>
+<p class="cli">irecovery -f trustcache.img4</p>
+<p class="cli">irecovery -c firmware</p>
+
+Send kernelcache and bootx:
+<p class="cli">irecovery -f kernelcache.img4</p>
+<p class="cli">irecovery -c bootx</p>
+
+
+<h2>In the case of generating keybags: </h2>
+If you see “AppleKeyStore: disabling use of effaceable storage, using fake key”, in verbose output, you can reboot to first system.</br>
+<img class="align" src="images/Image11.png"></br>
     
     Now mount disk0s1s3 and put keybagd in its original place:
     <p class="cli">mv /mnt1/usr/libexec/keybagd_bak /mnt1/usr/libexec/keybagd</p>

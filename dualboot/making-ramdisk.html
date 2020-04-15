@@ -5,27 +5,63 @@
                 <title>Dual Booting 64 Bit devices</title>
             </head>
 <body>
-<div>
-    <h2>Making custom ramdisk</h2>
+<div class="page">
+    <h1>Making custom ramdisk</h1>
     <p>Unfortunately there is no way of restoring our inverted image if disk0 is mounted, so we have to use a custom ramdisk.</br>
-    <h3> Patching AMFI </h3>
+    <h2> Patching AMFI </h2>
     <p>We need to patch amfi in kernel to make the ramdisk load custom binaries.
     Unpack the kernelcache:
     <p class="cli">img4 -i kernelcache.* -o kcache.raw</p>
-    And load it in IDA (or your disassembler) as ARM Little Endian. </br>
+    <h3> Manually Patching </h3>
+    Load kernelcache in IDA (or your disassembler) as ARM Little Endian. </br>
     Search "entitlements too small" string and jump to its Data XREF.</br>
     </br><img class="align" src="images/Image1.png"></br>
     </br>We need to look for next MOV X0,X24 instruction and double click on the next BL (7DA75C8 in this case).</br>
     </br></br><img class="align" src="images/Image2.png"></br>
     </br>Change STP X29,X30 and MOV X29,SP instructions to MOV W0,#1 and RET instructions</br>
     </br><img class="align" src="images/Image3.png"></br>
-    </br>Apply patches to kernelcache, compress it back lzss and pack it into img4
-    <p class="cli">relzss kcache.raw kcache.lzss</p>
-    <p class="cli">img4 -i kcache.lzss -o kernelcache -M IM4M -A -T rkrn</p>
-    Now add bash binary and needed libs and change restored_external with a script that will execute apfs_invert</br>
+    </br>Apply patches to kernelcache.</br>
+    
+    <h3>Automatically Patching</h3>
+    
+    To simplify dual booting process I wrote an <a href="https://github.com/Ralph0045/Kernel64Patcher" class="link">utility</a> based on liboffsetfinder64 that will automatically patch the kernel:
+    <p class="cli">Kernel64Patcher kcache.raw kcache.patched 12 -a</p>
+    
     <img class="align" src="images/Image4.png"></br>
-    That's how it will look.</br>
-    If you did everything correctly ramdisk should boot and run apfs_invert (don’t forget to send trust cache on iOS 12+).</br>
+    
+    Note: 12 is the iOS version in the example. The program supports 10 through 13.</br></br>
+    
+    First, convert an shsh2 file for your device (shsh version does not have to match iBoot version, any can be used) to raw IM4M with img4tool. This file will be critical for signing components later on:
+	
+	<p class="cli">img4tool -e -s *.shsh2 -m IM4M</p>
+
+Compress kernelcache back to lzss and pack it into img4:
+		
+    <p class="cli">relzss kcache.raw kcache.lzss</p>
+    <p class="cli">img4 -i kcache.lzss -o kernelcache.img4 -M IM4M -A -T rkrn</p>
+	
+	
+    <h2>Adding needed binaries</h2>
+    The custom ramdisk has to execute apfs_invert, so we need to make changes it's filesystem so it will execute our custom binary.
+    <p>Unpack original ramdisk into raw dmg:<p>
+	<p class="cli">img4 -i xxx.xxx.xxx.dmg -o ramdisk.dmg</p>
+    And mount it:
+    <p class="cli">hdiutil attach ramdisk.dmg</p>
+    Compile <a href="https://github.com/dualbootfun/dualbootfun.github.io/blob/master/source/restored-hax.c" class="link">restored-hax</a> (thanks to <a href="https://twitter.com/b1n4r1b01" class="link">@b1n4r1b01</a>) and sign it using ldid (iOS 10) or ldid2 (iOS 11+):
+    <p class="cli">xcrun -sdk iphoneos clang -arch arm64 restored-hax.c -o restored_hax</p>
+	<p class="cli">ldid2 -S restored_hax</p>
+    Note: don't forget to change disk0s1s3 in source code, if new system is a different partition.</br>
+    </br>Rename original restored_external:
+    <p class="cli">mv /Volumes/ramdisk_name/usr/local/bin/restored_external /Volumes/ramdisk_name/usr/local/bin/restored_external_bak</p>
+    And replace it with the compiled binary:
+    <p class="cli">cp -a restored_hax /Volumes/ramdisk_name/usr/local/bin/restored_external</p>
+    Now pack ramdisk into img4:
+    <p class="cli">img4 -i ramdisk.dmg -o ramdisk -M IM4M -A -T rdsk</p>
+    
+	Please refer to <a href="first-boot.html" class="link"></b>First Boot</a> for more booting instructions.</br>
+	
+	<p>If you did everything correctly ramdisk should boot and run apfs_invert (don’t forget to send trustcache on iOS 12+).</br>
+	
     </br><img class="limit" src="images/Image5.jpeg"></br></br>
         <center>Next part → <a href="modifying-filesystem.html" class="link"></b>Modifying filesystem</a></center></br>
 </p>

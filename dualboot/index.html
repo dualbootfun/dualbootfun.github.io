@@ -5,11 +5,11 @@
                 <title>Dual Booting 64 Bit devices</title>
             </head>
 <body>
-<div>
+<div class="main">
     <center><h1>Dual Booting 64 Bit devices</h1></center>
     <h3>Introduction:</h3>
     <p>Previously, all public information regarding iOS dual booting has been for 32bit devices, e. g. iPhone 5 and older,
-    and iPad 4th Generation and older. In this guide, we are going to be dual booting 64 bit devices, (iPhone 5s and newer)
+    and iPad 4th Generation and older. In this guide, we are going to be dual booting 64 bit devices, (iPhone 5s and newer).
     Keep in mind, the information you will see here focuses on APFS, Apple's new partition scheme, instead of old style HFS+.
     Just a little note, it should be possible to dual boot any version, provided the currently installed SEP is compatible
     with the target operating system. At the time of this article, we can only boot with the checkm8 exploit, which limits us
@@ -20,8 +20,10 @@
     
     <h3>Requirements:</h3>
     <ol>
-        <li><b>macOS</b> </li>
-        <li><b>ipwndfu</b> fork of linus_henze (or any utility to place device in pwned DFU mode)</li>
+	
+        <li><b>MacOS</b> </li>
+		<li><b>A 64bit jailbroken iPhone</b> </li>
+        <li><b>ipwndfu</b> fork of @LinusHenze (or any utility to place device in pwned DFU mode)</li>
         <li><b>A disassembler</b> (I will use IDA) </lI>
     </ol>
     <h2>Contents:</h2>
@@ -34,7 +36,8 @@
 <h2>Brought to you by <a href="https://twitter.com/Ralph0045" class="link">@Ralph0045</a> and <a href="https://twitter.com/mcg29_" class="link">@mcg29_</a> on twitter.</h2>
 <h2>Credits/Thanks to:</h2>
 <b>@axi0mx</b> for checkm8 exploit </br>
-<b>@linus_henze</b> for ipwndfu fork </br>
+<b>@b1n4r1b01</b> for restored_external tricks</br>
+<b>@LinusHenze</b> for ipwndfu fork </br>
 <b>@nyan_satan</b> for original 32 bit guide and fixkeybag </br>
 <b>@tihmstar</b> for iBoot64Patcher and liboffsetfinder64 </br>
 <b>@xerub</b> for img4lib </br>

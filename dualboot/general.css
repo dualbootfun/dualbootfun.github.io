@@ -1,13 +1,21 @@
 body {
+    height: 100%;
     font-family: Helvetica;
-	margin: auto;
+    margin: auto;
 }
 
-div {
-	margin:10;
-	height: auto;
-	min-height: 100%;
+div.main {
+    margin:10;
+    height: auto;
+    min-height: 100%;
     max-width: auto;
+}
+
+div.page {
+    padding 1px 10px;
+    margin:10px;
+    height: auto;
+    max-width: 800;
 }
 
 p.cli {

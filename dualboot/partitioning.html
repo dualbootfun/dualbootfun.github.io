@@ -5,17 +5,21 @@
                 <title>Dual Booting 64 Bit devices</title>
             </head>
         <body>
-<div>
+<div class="page">
     <h3>Partitioning</h3>
-    <p>With the introduction of APFS in iOS 10.3, Apple made partitioning much easier. In contrast to HFS+, This uses something called a<br />
+    <p>With the introduction of APFS in iOS 10.3, Apple made partitioning much easier. In contrast to HFS+, this uses something called a<br />
     container. It is much more efficient, and there is no limit to the amount of partitions that can be created. And, unless specified, new<br />
     volumes are dynamic and do not have a set size; rather they are allowed to share free space within the container itself.<p>
     <p>In this case, we are just going to add new volumes to the container, /dev/disk0s1:
     
     <p class="cli">newfs_apfs -A -v SystemB /dev/disk0s1</p>
     <p class="cli">newfs_apfs -A -v DataB /dev/disk0s1</p>
-    Done!</br> </br>
-    Mount new system partition (/dev/disk0s1s3) to /mnt1:
+    Done!</br></br>
+	
+	Important note: usually new partitions will be disk0s1s3 and disk0s1s4. However some newer devices already use these partitions so the new disks will be different, (for example, disk0s1s5 and disk0s1s6). Make sure to use your new partitions. </br></br>
+	
+	
+    Mount new system partition (/dev/disk0s1s3, in this case) to /mnt1:
     <p class="cli">mkdir /mnt1 /mnt2</p>
     <p class="cli">mount_apfs /dev/disk0s1s3 /mnt1</p></p>
     
@@ -28,9 +32,9 @@
     <p class="cli">asr -source rootfs.dmg -target out.dmg --embed -erase -noprompt --chunkchecksum --puppetstrings</p>
     
     
-    <p>Make sure iproxy is running. This can also be done over network instead of iproxy, but it will be much slower.<p>
+    <p>Make sure iproxy is running. This can also be done over network instead of iproxy, but it will be much slower:<p>
     <p class="cli">iproxy 2222 22</p>
-    <p>then copy the out file to / of new system partition using scp.</p>
+    <p>Then copy the out file to / of new system partition using scp:</p>
     <p class="cli">scp -P 2222 out.dmg root@localhost:/mnt1</p>
     <center>Next part → <a href="making-ramdisk.html" class="link"></b>Making ramdisk</a></center></br>
 </div>
