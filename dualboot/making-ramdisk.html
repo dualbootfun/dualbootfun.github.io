@@ -35,16 +35,14 @@
 	
 	<p class="cli">img4tool -e -s *.shsh2 -m IM4M</p>
 
-    Create a patch file: </br>
-    
-    <img src="images/Image5.png"> </br>
-
-    And apply it using img4:
+Compress kernelcache back to lzss and pack it into img4:
 		
-    <p class="cli">img4 -i kernelcache.realease.* -o kernelcache.img4 -M IM4M -A -T rkrn -P patch_file</p>
+    <p class="cli">relzss kcache.raw kcache.lzss</p>
+    <p class="cli">img4 -i kcache.lzss -o kernelcache.img4 -M IM4M -A -T rkrn</p>
+	
 	
     <h2>Adding needed binaries</h2>
-    The custom ramdisk has to execute apfs_invert, so we need to make changes to it's filesystem so it will execute our custom binary.
+    The custom ramdisk has to execute apfs_invert, so we need to make changes it's filesystem so it will execute our custom binary.
     <p>Unpack original ramdisk into raw dmg:<p>
 	<p class="cli">img4 -i xxx.xxx.xxx.dmg -o ramdisk.dmg</p>
     And mount it:
@@ -64,7 +62,7 @@
 	
 	<p>If you did everything correctly ramdisk should boot and run apfs_invert (don’t forget to send trustcache on iOS 12+).</br>
 	
-    </br><img class="limit" src="images/Image6.jpeg"></br></br>
+    </br><img class="limit" src="images/Image5.jpeg"></br></br>
         <center>Next part → <a href="modifying-filesystem.html" class="link"></b>Modifying filesystem</a></center></br>
 </p>
 </div>
