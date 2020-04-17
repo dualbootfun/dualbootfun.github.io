@@ -11,7 +11,7 @@ int main(){
     printf("****************************************************\n");
     printf("****************************************************\n");
     int pid, i;
-    char *arg[] = {"apfs_invert", "-d","/dev/disk0s1","-s","3","-n","apfs_invert_asr_img", NULL}; // modify me if neeeded
+    char *arg[] = {"apfs_invert", "-d","/dev/disk0s1","-s","3","-n","out.dmg", NULL}; // modify me if neeeded
     posix_spawn(&pid, "/System/Library/Filesystems/apfs.fs/apfs_invert",NULL, NULL, (char* const*)arg, NULL);
     waitpid(pid, &i, 0);
     /* Mount partition */

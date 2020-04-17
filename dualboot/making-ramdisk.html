@@ -35,21 +35,25 @@
 	
 	<p class="cli">img4tool -e -s *.shsh2 -m IM4M</p>
 
-Compress kernelcache back to lzss and pack it into img4:
+    Create a patch file: </br>
+    
+    <p class="cli">touch kc.bpatch</p>
+    
+    <img src="images/Image5.png"> </br>
+
+    And apply it using img4:
 		
-    <p class="cli">relzss kcache.raw kcache.lzss</p>
-    <p class="cli">img4 -i kcache.lzss -o kernelcache.img4 -M IM4M -A -T rkrn</p>
-	
+    <p class="cli">img4 -i kernelcache.realease.* -o kernelcache.img4 -M IM4M -A -T rkrn -P kc_patch</p>
 	
     <h2>Adding needed binaries</h2>
-    The custom ramdisk has to execute apfs_invert, so we need to make changes it's filesystem so it will execute our custom binary.
+    The custom ramdisk has to execute apfs_invert, so we need to make changes to it's filesystem so it will execute our custom binary.
     <p>Unpack original ramdisk into raw dmg:<p>
 	<p class="cli">img4 -i xxx.xxx.xxx.dmg -o ramdisk.dmg</p>
     And mount it:
     <p class="cli">hdiutil attach ramdisk.dmg</p>
     Compile <a href="https://github.com/dualbootfun/dualbootfun.github.io/blob/master/source/restored-hax.c" class="link">restored-hax</a> (thanks to <a href="https://twitter.com/b1n4r1b01" class="link">@b1n4r1b01</a>) and sign it using ldid (iOS 10) or ldid2 (iOS 11+):
     <p class="cli">xcrun -sdk iphoneos clang -arch arm64 restored-hax.c -o restored_hax</p>
-	<p class="cli">ldid2 -S restored_hax</p>
+	<p class="cli">ldid(2) -S restored_hax</p>
     Note: don't forget to change disk0s1s3 in source code, if new system is a different partition.</br>
     </br>Rename original restored_external:
     <p class="cli">mv /Volumes/ramdisk_name/usr/local/bin/restored_external /Volumes/ramdisk_name/usr/local/bin/restored_external_bak</p>
@@ -62,7 +66,7 @@ Compress kernelcache back to lzss and pack it into img4:
 	
 	<p>If you did everything correctly ramdisk should boot and run apfs_invert (don’t forget to send trustcache on iOS 12+).</br>
 	
-    </br><img class="limit" src="images/Image5.jpeg"></br></br>
+    </br><img class="limit" src="images/Image6.jpeg"></br></br>
         <center>Next part → <a href="modifying-filesystem.html" class="link"></b>Modifying filesystem</a></center></br>
 </p>
 </div>
