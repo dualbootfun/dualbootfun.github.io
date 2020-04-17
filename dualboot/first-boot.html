@@ -23,7 +23,7 @@ Otherwise, for booting the second iOS install, iBEC needs an arg which will poin
 Add rd=disk0s1s3 (or your new system partition disk) and -v args to iBEC:
 <p class="cli">iBoot64Patcher iBEC.dec iBEC.patched -b “rd=disk0s1s3 -v”</p>
 
-</br><img class="align" src="images/Image9.png"></br>
+</br><img class="align" src="images/Image10.png"></br>
 
 Now pack them back into img4: 
 
@@ -34,10 +34,10 @@ For booting the second OS, Sign stock kernelcache ,applelogo and trustcache (on 
 <p class="cli">img4 -i *.im4p -o *.img4 -M IM4M</p>
 
 Note: you can find trustcache name in BuildManifest.plist</br>
-</br><img class="align" src="images/Image10.png"></br>
+</br><img class="align" src="images/Image11.png"></br>
 
 </br>Pack devicetree into img4 with rdtr (RestoreDevicetree) tag. The devicetree needs this tag, otherwise iBEC will refuse to see it as valid:
-<p class="cli">img4 -i devicetree.raw -o devicetree.img4 -M IM4M -T rdtr</p>
+<p class="cli">img4 -i DeviceTree.* -o devicetree.img4 -M IM4M -T rdtr</p>
 
 Done!</br>
 
@@ -67,7 +67,7 @@ Send kernelcache and bootx:
 
 <h2>In the case of generating keybags: </h2>
 If you see “AppleKeyStore: disabling use of effaceable storage, using fake key”, in verbose output, you can reboot to first system.</br>
-<img class="align" src="images/Image11.png"></br>
+<img class="align" src="images/Image12.png"></br>
     
     Now mount disk0s1s3 and put keybagd in its original place:
     <p class="cli">mv /mnt1/usr/libexec/keybagd_bak /mnt1/usr/libexec/keybagd</p>
