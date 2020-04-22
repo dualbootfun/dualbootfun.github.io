@@ -15,7 +15,7 @@ Modify fstab using nano:
     Press CTRL-O to save and CTRL-X to exit.
     
     <p>Now we have to add SEP to the second system:</br>
-    <p class="cli">cp -a /usr/standalone/firmware/sep* /mnt1/usr/standalone</p>
+    <p class="cli">cp -a /usr/standalone/firmware/sep* /mnt1/usr/standalone/firmware/</p>
     <p>Also add the baseband firmware:</br>
     <p class="cli">cp -av /usr/local /mnt1/usr/local</p>
     <p>The baseband is located inside of /usr/local, and the firmware names vary across devices. We can just copy it since the /usr/local path does not exist on the new system.<p>
