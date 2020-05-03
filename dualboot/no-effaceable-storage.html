@@ -12,11 +12,19 @@
     <p class="cli">cp -av /var/keybags /mnt2</p>
     <p>If you choose to generate it, continue here.<p>
     <h3>Patching devicetree</h3>
-    We have to add no-effaceable-storage property.</br>
+    <p> I wrote a <a href="https://github.com/Ralph0045/dtree_patcher" class="link">patcher</a> to automate the process. </br></br>
+    
+    Unpack devicetree:
+    <p class="cli">img4 -i DeviceTree* -o dtree.raw</p>
+
+    Patch it:
+    <p class="cli">dtree_patcher dtree.raw dtree.patched -d </p>
+    
     <img class="align" src="images/Image8.png"></br>
-        Check "use-lwvm" property and add no-effaceable-storage property above it.</br>
-        <img class="align" src="images/Image9.png"></br>
-            I replaced “supported-legacy-panic-flow” instead of adding it, but it’s better adding it.</p>
+    
+    And pack patched devicetree into img4:
+    <p class="cli">img4 -i dtree.patched -o devicetree.img4 -M IM4M -T rdtr</p>
+    
 <h3>Adding fixkeybag</h3>
 <p>Thanks to @nyan_satan for this technique.
 We’ll make our keybag generate when booting for first time: compile <a href="https://github.com/NyanSatan/fixkeybag/tree/65250ad143872eab97cb4a2e034ce311903ade5a" class="link">fixkeybag</a> for arm64 and put it in / of disk0s1s3 (don’t forget to sign it using ldid for iOS 10, ldid2 for iOS 11+).

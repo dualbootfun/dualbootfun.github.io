@@ -39,15 +39,15 @@
     
     <p class="cli">touch kc.bpatch</p>
     
-    Note: you can use Hex Fiend to compare the original raw kernelcache and patched kernelcache. 
+    Note: you can use Hex Fiend to compare the original raw kernelcache and patched kernelcache or this python <a href="https://github.com/dualbootfun/dualbootfun.github.io/blob/master/source/compareFiles.py" class="link">script</a> for creating diff file:
     
-    Add differences to the new kc.bpatch file created with touch:
+    <p class="cli">python3 compareFiles.py kcache.raw kcache.patched</p>
 
     <img src="images/Image5.png"> </br>
 
     And apply it using img4:
 		
-    <p class="cli">img4 -i kernelcache.realease.* -o kernelcache.img4 -M IM4M -A -T rkrn -P kc_patch</p>
+    <p class="cli">img4 -i kernelcache.realease.* -o kernelcache.img4 -M IM4M -T rkrn -P kc_patch</p>
 	
     <h2>Adding needed binaries</h2>
     The custom ramdisk has to execute apfs_invert, so we need to make changes to it's filesystem so it will execute our custom binary.

@@ -1,0 +1,47 @@
+<html>
+    <link rel="stylesheet" href="general.css"></br>
+        <meta charset="Unicode">
+            <head>
+                <title>Dual Booting 64 Bit devices</title>
+            </head>
+<body>
+<div class="page">
+<h2>iOS 13</h2>
+
+<p> With the introduction of iOS 13 Apple moved fstab from filesystem to DeviceTree. Partitions are now recognized with roles:
+<ul>
+    <li><b>s</b> for System partition </li>
+    <li><b>d</b> for Data partition </li>
+    <li><b>x</b> for xART partition </li>
+    <li><b>a</b> for Baseband Data partition </li>
+    <li><b>p</b> for Update partition </li>
+</ul>
+
+Free roles are l, r and 0. </br>
+
+We can't write more volumes with same roles and fstab from filesystem will be ignored. The best way for getting our kernel to boot with second data is patching devicetree to use role 0 on Data partition and create system with one of the two free roles. </p>
+
+<h2> Partitoning </h2>
+
+<p class="cli">newfs_apfs -o role=r -A -v SystemB /dev/disk0s1</p>
+<p class="cli">newfs_apfs -o role=0 -A -v DataB /dev/disk0s1</p>
+
+<h2> Patching DeviceTree </h2>
+
+<p> You can patch using <a href="https://github.com/Ralph0045/dtree_patcher" class="link">dtree_patcher</a>. </br></br>
+
+Unpack the devicetree:
+<p class="cli">img4 -i DeviceTree* -o dtree.raw</p>
+
+And patch it:
+<p class="cli">dtree_patcher dtree.raw dtree.patched -d (-n)</p>
+
+Pack patched devicetree into img4:
+<p class="cli">img4 -i dtree.patched -o devicetree.img4 -A -M IM4M -T rdtr</p>
+
+Now process is same as other versions. You can follow main guide. </p>
+
+<center><a href="index.html" class="link"></b>Dual Booting 64 Bit</a></center></br>
+</div>
+</body>
+</html>

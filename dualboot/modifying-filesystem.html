@@ -7,7 +7,11 @@
 <body>
 <div class="page">
 <h2>Modifying filesystem</h2>
-Modify fstab using nano:
+
+Mount System partition:
+<p class="cli">mount_apfs /dev/disk0s1s3 /mnt1</p>
+
+And modify fstab using nano:
 <p class="cli">cp -av /etc/fstab /mnt1/etc/fstab</p>
 <p class="cli">nano /mnt1/etc/fstab</p>
 <img class="align" src="images/Image7.png"></br>
@@ -21,8 +25,7 @@ Modify fstab using nano:
     <p>The baseband is located inside of /usr/local, and the firmware names vary across devices. We can just copy it since the /usr/local path does not exist on the new system.<p>
     
     <h2>Modifying data partition</h2>
-    <p>Now we have to mount system and move /private/var to new partition:
-    <p class="cli">mount_apfs /dev/disk0s1s3 /mnt1</p>
+    <p>Now we have to move /private/var to new Data partition:
     <p class="cli">mount_apfs /dev/disk0s1s4 /mnt2</p>
     <p class="cli">mv -v /mnt1/private/var/* /mnt2</p></br>
     <center>Next part → <a href="no-effaceable-storage.html" class="link"></b>no-effaceable-storage</a></center></br>

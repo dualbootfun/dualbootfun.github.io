@@ -7,14 +7,12 @@
         <body>
 <div class="page">
     <h3>Partitioning</h3>
-    <p>With the introduction of APFS in iOS 10.3, Apple made partitioning much easier. In contrast to HFS+, this uses something called a<br />
-    container. It is much more efficient, and there is no limit to the amount of partitions that can be created. And, unless specified, new<br />
-    volumes are dynamic and do not have a set size; rather they are allowed to share free space within the container itself.<p>
-    <p>In this case, we are just going to add new volumes to the container, /dev/disk0s1:
+    <p>With the introduction of APFS in iOS 10.3, Apple made partitioning much easier. In contrast to HFS+, this uses something called a container. It is much more efficient, and there is no limit to the amount of partitions that can be created. And, unless specified, new volumes are dynamic and do not have a set size; rather they are allowed to share free space within the container itself. </br>
+    In this case, we are just going to add new volumes to the container, /dev/disk0s1:
     
     <p class="cli">newfs_apfs -A -v SystemB /dev/disk0s1</p>
     <p class="cli">newfs_apfs -A -v DataB /dev/disk0s1</p>
-    Done!</br></br>
+    Done! </br> </br>
 	
 	Important note: usually new partitions will be disk0s1s3 and disk0s1s4. However some newer devices already use these partitions so the new disks will be different, (for example, disk0s1s5 and disk0s1s6). Make sure to use your new partitions. </br></br>
 	
@@ -36,7 +34,7 @@
     <p class="cli">iproxy 2222 22</p>
     <p>Then copy the out file to / of new system partition using scp:</p>
     <p class="cli">scp -P 2222 out.dmg root@localhost:/mnt1</p>
-    <center>Next part → <a href="making-ramdisk.html" class="link"></b>Making ramdisk</a></center></br>
+    <center>Next part → <a href="making-ramdisk.html" class="link"></b>Making ramdisk</a></center></br> </p>
 </div>
 </body>
 </html>
