@@ -47,7 +47,7 @@
 
     And apply it using img4:
 		
-    <p class="cli">img4 -i kernelcache.realease.* -o kernelcache.img4 -M IM4M -T rkrn -P kc_patch</p>
+    <p class="cli">img4 -i kernelcache.release.* -o kernelcache.img4 -M IM4M -T rkrn -P kc.bpatch</p>
 	
     <h2>Adding needed binaries</h2>
     The custom ramdisk has to execute apfs_invert, so we need to make changes to it's filesystem so it will execute our custom binary.
