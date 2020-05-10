@@ -39,7 +39,26 @@ And patch it:
 Pack patched devicetree into img4:
 <p class="cli">img4 -i dtree.patched -o devicetree.img4 -A -M IM4M -T rdtr</p>
 
-Now process is same as other versions. You can follow main guide. </p>
+<h2>First Boot</h2>
+
+Boot process is different, we have to send more bootchain. </br> </br>
+Change iBoot boot-partition to 5: </br>
+<img class="align" src="images/Image12.png"></br>
+Search for "com.apple.kernelcache" and change the 0 behind it to 5 (or your System partition-1, disk0s1s1=0, disk0s1s2=1). </br></br>
+
+Pack aopfw, ISP (adc-nike), AudioCodecFirmware (CallanFirmware), Multitouch and Trustcache into img4:
+
+<p class="cli">img4 -i image.im4p -o image.img4 -M IM4M</p>
+
+Send iBSS, iBEC, applelogo, devicetree and all signed images. Then load them using firmware command:
+
+<p class="cli">irecovery -f image.img4</p>
+<p class="cli">irecovery -c firmware</p>
+
+Send kernelcache and bootx:
+
+<p class="cli">irecovery -f kernelcache.img4</p>
+<p class="cli">irecovery -c bootx</p>
 
 <center><a href="index.html" class="link"></b>Dual Booting 64 Bit</a></center></br>
 </div>
