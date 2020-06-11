@@ -1,11 +1,15 @@
 <html>
     <link rel="stylesheet" href="general.css"></br>
+    <script src="script.js"></script>
         <meta charset="Unicode">
             <head>
                 <title>Dual Booting 64 Bit devices</title>
             </head>
-<body>
-<div class="page">
+<body onload="dark_save()">
+<div class="main">
+    
+    <button id="dark_button" class="btn" onclick="dark()">🌙</button>
+    
     <h2>no-effaceable-storage</h2>
     <p>Dual booted OS is almost ready to boot, we just need to generate a keybag or copy it.
     If you choose to copy it, you won’t be able to set a passcode, if you’ll do it, effaceable keys will be regenerated and first OS won’t boot anymore (so you’ll need to restore the device). </p>
@@ -18,12 +22,12 @@
     <p class="cli">img4 -i DeviceTree* -o dtree.raw</p>
 
     Patch it:
-    <p class="cli">dtree_patcher dtree.raw dtree.patched -d </p>
+    <p class="cli">dtree_patcher dtree.raw dtree.patched -n </p>
     
     <img class="align" src="images/Image8.png"></br>
     
     And pack patched devicetree into img4:
-    <p class="cli">img4 -i dtree.patched -o devicetree.img4 -M IM4M -T rdtr</p>
+    <p class="cli">img4 -i dtree.patched -o devicetree.img4 -M IM4M -A -T rdtr</p>
     
 <h3>Adding fixkeybag</h3>
 <p>Thanks to @nyan_satan for this technique.

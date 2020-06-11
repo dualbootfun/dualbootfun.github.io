@@ -1,11 +1,15 @@
 <html>
     <link rel="stylesheet" href="general.css"></br>
+    <script src="script.js"></script>
         <meta charset="Unicode">
             <head>
                 <title>Dual Booting 64 Bit devices</title>
             </head>
-<body>
-<div class="page">
+<body onload="dark_save()">
+<div class="main">
+    
+    <button id="dark_button" class="btn" onclick="dark()">🌙</button>
+    
     <h1>Making custom ramdisk</h1>
     <p>Unfortunately there is no way of restoring our inverted image if disk0 is mounted, so we have to use a custom ramdisk.</br>
     <h2> Patching AMFI </h2>

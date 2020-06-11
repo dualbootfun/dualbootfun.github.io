@@ -1,11 +1,15 @@
 <html>
     <link rel="stylesheet" href="general.css"></br>
+    <script src="script.js"></script>
         <meta charset="Unicode">
             <head>
                 <title>Dual Booting 64 Bit devices</title>
             </head>
-<body>
-<div class="page">
+<body onload="dark_save()">
+<div class="main">
+    
+    <button id="dark_button" class="btn" onclick="dark()">🌙</button>
+    
 <h2>First boot</h2>
 
 Decrypt iBSS and iBEC:
@@ -66,8 +70,8 @@ Send kernelcache and bootx:
 
 
 <h2>In the case of generating keybags: </h2>
-If you see “AppleKeyStore: disabling use of effaceable storage, using fake key”, in verbose output, you can reboot to first system.</br>
-<img class="align" src="images/Image11.png"></br>
+If you see “AppleKeyStore: disabling use of effaceable storage, using fake key”, in verbose output, you can reboot to first system.</br> </br>
+<img class="align" src="images/Image11.png"></br> </br>
     
     Now mount disk0s1s3 and put keybagd in its original place:
     <p class="cli">mv /mnt1/usr/libexec/keybagd_bak /mnt1/usr/libexec/keybagd</p>

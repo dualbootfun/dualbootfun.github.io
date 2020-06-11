@@ -1,11 +1,15 @@
 <html>
     <link rel="stylesheet" href="general.css"></br>
+    <script src="script.js"></script>
         <meta charset="Unicode">
             <head>
                 <title>Dual Booting 64 Bit devices</title>
             </head>
-<body>
-<div class="page">
+<body onload="dark_save()">
+<div class="main">
+    
+<button id="dark_button" class="btn" onclick="dark()">🌙</button>
+    
 <h2>iOS 13</h2>
 
 <p> With the introduction of iOS 13 Apple moved fstab from filesystem to DeviceTree. Partitions are now recognized with roles:

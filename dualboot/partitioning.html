@@ -1,11 +1,15 @@
 <html>
     <link rel="stylesheet" href="general.css"></br>
+    <script src="script.js"></script>
         <meta charset="Unicode">
             <head>
                 <title>Dual Booting 64 Bit devices</title>
             </head>
-        <body>
-<div class="page">
+<body onload="dark_save()">
+<div class="main">
+    
+    <button id="dark_button" class="btn" onclick="dark()">🌙</button>
+    
     <h3>Partitioning</h3>
     <p>With the introduction of APFS in iOS 10.3, Apple made partitioning much easier. In contrast to HFS+, this uses something called a container. It is much more efficient, and there is no limit to the amount of partitions that can be created. And, unless specified, new volumes are dynamic and do not have a set size; rather they are allowed to share free space within the container itself. </br>
     In this case, we are just going to add new volumes to the container, /dev/disk0s1:
