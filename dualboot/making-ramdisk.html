@@ -41,8 +41,10 @@
     
     With the latest commit of <a href="https://github.com/tihmstar/img4tool" class="link">img4tool</a>, a patched kernel can now be compressed properly:
 		
-    <p class="cli">img4tool -c kernelcache.img4 -s *.shsh2 -t rkrn kcache.patched --compression bvx2</p>
+    <p class="cli">img4tool -c kernelcache.im4p -t rkrn kcache.patched --compression bvx2</p>
     
+    <p class="cli">img4tool -c kernelcache.img4 -p kernelcache.im4p -m IM4M</p>
+
     (For A9 and under, replace bvx2 with complzss.)
 
     <h2>Adding needed binaries</h2>
