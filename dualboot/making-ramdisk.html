@@ -28,7 +28,7 @@
     
     <h3>Automatically Patching</h3>
     
-    To simplify dual booting process I wrote an <a href="https://github.com/Ralph0045/Kernel64Patcher" class="link">utility</a> based on <a href="https://github.com/xerub/patchfinder64" class="link">xerub's</a> patchfinder64 that will automatically patch the kernel:
+    To simplify dual booting process I wrote an <a href="https://github.com/Ralph0045/Kernel64Patcher" class="link">utility</a> based on xerub's <a href="https://github.com/xerub/patchfinder64" class="link">patchfinder64</a> that will automatically patch the kernel:
     <p class="cli">Kernel64Patcher kcache.raw kcache.patched 12 -a</p>
     
     <img class="align" src="images/Image4.png"></br>
@@ -43,7 +43,7 @@
 		
     <p class="cli">img4tool -c kernelcache.img4 -s *.shsh2 -t rkrn kcache.patched --compression bvx2</p>
     
-    (For A9 and under, replace <p class="cli">bvx2</p> with <p class="cli">complzss</p>.)
+    (For A9 and under, replace bvx2 with complzss.)
 
     <h2>Adding needed binaries</h2>
     The custom ramdisk has to execute apfs_invert, so we need to make changes to it's filesystem so it will execute our custom binary.
