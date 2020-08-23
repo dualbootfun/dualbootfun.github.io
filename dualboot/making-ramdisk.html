@@ -29,11 +29,11 @@
     <h3>Automatically Patching</h3>
     
     To simplify dual booting process I wrote an <a href="https://github.com/Ralph0045/Kernel64Patcher" class="link">utility</a> based on xerub's <a href="https://github.com/xerub/patchfinder64" class="link">patchfinder64</a> that will automatically patch the kernel:
-    <p class="cli">Kernel64Patcher kcache.raw kcache.patched 12 -a</p>
+    <p class="cli">Kernel64Patcher kcache.raw kcache.patched -a</p>
     
     <img class="align" src="images/Image4.png"></br>
     
-    Note: 12 is the iOS version in the example. The program supports 10 through 13.</br></br>
+    The program supports iOS 10 through iOS 14 kernelcaches.</br></br>
     
     First, convert an shsh2 file for your device (shsh version does not have to match iBoot version, any can be used) to raw IM4M with img4tool. This file will be critical for signing components later on:
 	
@@ -41,11 +41,9 @@
     
     With the latest commit of <a href="https://github.com/tihmstar/img4tool" class="link">img4tool</a>, a patched kernel can now be compressed properly:
 		
-    <p class="cli">img4tool -c kernelcache.im4p -t rkrn kcache.patched --compression bvx2</p>
+    <p class="cli">img4tool -c kernelcache.im4p -t rkrn kcache.patched --compression complzss</p>
     
     <p class="cli">img4tool -c kernelcache.img4 -p kernelcache.im4p -m IM4M</p>
-
-    (For A9 and under, replace bvx2 with complzss.)
 
     <h2>Adding needed binaries</h2>
     The custom ramdisk has to execute apfs_invert, so we need to make changes to it's filesystem so it will execute our custom binary.
