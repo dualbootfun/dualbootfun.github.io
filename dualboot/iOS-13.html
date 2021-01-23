@@ -30,7 +30,13 @@ We can't write more volumes with same roles and fstab from filesystem will be ig
 <p class="cli">newfs_apfs -o role=r -A -v SystemB /dev/disk0s1</p>
 <p class="cli">newfs_apfs -o role=0 -A -v DataB /dev/disk0s1</p>
 
-<h2> Patching DeviceTree </h2>
+<h2> Modifying Filesystem </h2>
+
+<p class="cli">mkdir /mnt1/private/xarts</p>
+
+<h2> Patching Bootchain</h2>
+
+<h4>DeviceTree </h4>
 
 <p> You can patch using <a href="https://github.com/Ralph0045/dtree_patcher" class="link">dtree_patcher</a>. </br></br>
 
@@ -43,7 +49,6 @@ And patch it:
 Pack patched devicetree into img4:
 <p class="cli">img4 -i dtree.patched -o devicetree.img4 -A -M IM4M -T rdtr</p>
 
-<h2>First Boot</h2>
 
 Boot process is different, we have to send more bootchain. </br> </br>
 Change iBoot boot-partition to 5: </br>
@@ -54,6 +59,8 @@ Pack aopfw, ISP (adc-nike), AudioCodecFirmware (CallanFirmware), Multitouch and 
 
 <p class="cli">img4 -i image.im4p -o image.img4 -M IM4M</p>
 
+<h2>First Boot</h2>
+
 Send iBSS, iBEC, applelogo, devicetree and all signed images. Then load them using firmware command:
 
 <p class="cli">irecovery -f image.img4</p>
@@ -63,6 +70,7 @@ Send kernelcache and bootx:
 
 <p class="cli">irecovery -f kernelcache.img4</p>
 <p class="cli">irecovery -c bootx</p>
+
 
 <center><a href="index.html" class="link"></b>Dual Booting 64 Bit</a></center></br>
 </div>

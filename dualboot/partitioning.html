@@ -20,25 +20,27 @@
 	
 	Important note: usually new partitions will be disk0s1s3 and disk0s1s4. However some newer devices already use these partitions so the new disks will be different, (for example, disk0s1s5 and disk0s1s6). Make sure to use your new partitions. </br></br>
 	
-	
-    Mount new system partition (/dev/disk0s1s3, in this case) to /mnt1:
-    <p class="cli">mkdir /mnt1 /mnt2</p>
+	<p>Create mount points for the two new partitions:</p>
+	<p class="cli">mkdir /mnt1 /mnt2</p>
+    Mount new system partition (/dev/disk0s1s3, in the case of this example) to /mnt1:
     <p class="cli">mount_apfs /dev/disk0s1s3 /mnt1</p></p>
     
     <h3>Restoring RootFS</h3>
     <p>APFS changed the way Apple handles restoring root filesystem images. It is no longer possible to directly restore images to the target partition.
-    Rather, asr is run in a ramdisk to create something called an inverted asr image, which the apfs_invert binary flashes to the new partition.
+    Rather, asr is run in a ramdisk to create something called an inverted asr image, which the apfs_invert binary flashes to the new partition.</p>
     
+	<p>The root filesystem is always the largest file with a ".dmg" extension. The two smaller .dmg files are the update and restore ramdisks. It should be noted that rootfs names across different iOS versions vary. </p>
     
-    Run asr on macOS to create an invertible asr image: </p>
-    <p class="cli">asr -source rootfs.dmg -target out.dmg --embed -erase -noprompt --chunkchecksum --puppetstrings</p>
+    <p>Run asr on macOS to create an invertible asr image: </p>
+    <p class="cli">asr -source xxx.xxxxx.xxx.dmg -target out.dmg --embed -erase -noprompt --chunkchecksum --puppetstrings</p>
     
     
     <p>Make sure iproxy is running. This can also be done over network instead of iproxy, but it will be much slower:<p>
     <p class="cli">iproxy 2222 22</p>
     <p>Then copy the out file to / of new system partition using scp:</p>
     <p class="cli">scp -P 2222 out.dmg root@localhost:/mnt1</p>
-    <center>Next part → <a href="making-ramdisk.html" class="link"></b>Making ramdisk</a></center></br> </p>
+	<center>Next part → <a href="patching_bootchain.html" class="link"></b>Patching Bootchain</a></center></br>
+	<center><a href="index.html" class="link"></b>Dual Booting 64 Bit</a></center></br>
 </div>
 </body>
 </html>

@@ -11,10 +11,12 @@
     <button id="dark_button" class="btn" onclick="dark()">🌙</button>
     
     <h2>no-effaceable-storage</h2>
-    <p>Dual booted OS is almost ready to boot, we just need to generate a keybag or copy it.
-    If you choose to copy it, you won’t be able to set a passcode, if you’ll do it, effaceable keys will be regenerated and first OS won’t boot anymore (so you’ll need to restore the device). </p>
+    <p>Dual booted OS is almost ready to boot, we just need to generate a keybag or copy it.</p>
+    <p>Copying is the best option. However, you won’t be able to set a passcode. If you set one on a system with copied keybags, effaceable keys will be regenerated and first OS won’t boot anymore. (Then you’ll need to restore the device). </p>
     <p class="cli">cp -av /var/keybags /mnt2</p>
-    <p>If you choose to generate it, continue here.<p>
+	<p>Generating should only be used if main OS keybags are not compatible with secondary system. Most of the time if SEP is compatible, keybags from the main OS will also be compatible.</p>
+	<p><b>This process is also very dangerous on A10+ devices. Generating on the iPhone 8 seemed not to work at all, and required a restore.</b></p> 
+    <p>However, if you choose to generate it, continue here.<p>
     <h3>Patching devicetree</h3>
     <p> I wrote a <a href="https://github.com/Ralph0045/dtree_patcher" class="link">patcher</a> to automate the process. </br></br>
     
@@ -41,6 +43,7 @@ Save original keybagd, sign fixkeybag and replace it with fixkeybag
 Second system is ready to boot. Now we have to patch bootchain and boot it.</p>
 
 <center>Next part → <a href="first-boot.html" class="link"></b>First boot</a></center></br>
+    <center><a href="index.html" class="link"></b>Dual Booting 64 Bit</a></center></br>
 </div>
 </body>
 </html>
