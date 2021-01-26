@@ -1,0 +1,59 @@
+<html>
+    <link rel="stylesheet" href="general.css"></br>
+    <script src="script.js"></script>
+        <meta charset="Unicode">
+            <head>
+                <title>Dual Booting 64 Bit devices</title>
+            </head>
+<body onload="dark_save()">
+<div class="main">
+    
+    <button id="dark_button" class="btn" onclick="dark()">🌙</button>
+    
+<h2>Modifying filesystem</h2>
+
+Mount System partition:
+<p class="cli">mount_apfs /dev/disk0s1s3 /mnt1</p>
+
+And modify fstab using nano:
+<p class="cli">cp -a /etc/fstab /mnt1/etc/fstab</p>
+<p class="cli">nano /mnt1/etc/fstab</p>
+<img class="align" src="images/Image7.png"></br>
+    Change disk0s1s1 to disk0s1s3 and disk0s1s2 to disk0s1s4. (or the new system and data partitions disks based on the device.)</br>
+    Press CTRL-O to save and CTRL-X to exit.
+    
+    <p>Now we have to add SEP to the second system:</br>
+    <p class="cli">cp -a /usr/standalone/firmware/sep* /mnt1/usr/standalone/firmware/</p>
+    <p>Also add the baseband firmware:</br>
+    <p class="cli">cp -av /usr/local /mnt1/usr/local</p>
+    <p>The baseband is located inside of /usr/local, and the firmware names vary across devices. We can just copy it since the /usr/local path does not exist on the new system.<p>
+    
+	<h3>Fixing Baseband and Touch ID</h3>
+	<p  class="cli">cp -av /System/Library/Caches/com.apple.factorydata/ /mnt1/System/Library/Caches/</p>
+	<p>Now the secondary OS can be activated properly with working service!</p>
+    <h3>Modifying data partition</h3>
+    <p>Now we have to move /private/var to new Data partition:
+    <p class="cli">mount_apfs /dev/disk0s1s4 /mnt2</p>
+    <p class="cli">mv -v /mnt1/private/var/* /mnt2</p>
+	<p>The system requires this folder to be present on newer devices which have a baseband data paritition:</p>
+	<p class="cli">mkdir /mnt2/wireless/baseband_data</p>
+	
+	<h3><b>Notes for haptic devices</b></h3>
+
+	<p>With the introduction of the iPhone 6s, Apple began to utilize a haptic feedback engine in their devices, mainly for 3D Touch. The iPhone 7(+) and 8(+) also shipped with  
+	capacitive home buttons which do not physically click, but instead use the haptic engine to simulate a click.</p>
+	<p>In order to fix haptics on the second operating system, we must copy FUD data restored to the main install.</p>
+	<p>copy FUD data to new system:</p>
+	<p class="cli">cp -av /usr/standalone/firmware/FUD /mnt1/usr/standalone</p>
+
+	<p>In order for the secondary system to see this data as valid, it is also required to copy the main OS apticket (as the FUD images are signed with those)</p>
+
+	<p class="cli">cp -av /System/Libary/Caches/apticket.der /mnt1/System/Library/Caches</p>
+
+	<p>Now 3D touch feedback and home buttons will work as intended!</p></br>
+	
+    <center>Next part → <a href="no-effaceable-storage.html" class="link"></b>no-effaceable-storage</a></center></br>
+	<center><a href="index.html" class="link"></b>Dual Booting 64 Bit</a></center></br>
+</div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<html>
+    <link rel="stylesheet" href="general.css"></br>
+    <script src="script.js"></script>
+        <meta charset="Unicode">
+            <head>
+                <title>Dual Booting 64 Bit devices</title>
+            </head>
+<body onload="dark_save()">
+<div class="main">
+    
+<button id="dark_button" class="btn" onclick="dark()">🌙</button>
+    
+<h2>iOS 13</h2>
+
+<p> With the introduction of iOS 13 Apple moved fstab from filesystem to DeviceTree. Partitions are now recognized with roles:
+<ul>
+    <li><b>s</b> for System partition </li>
+    <li><b>d</b> for Data partition </li>
+    <li><b>x</b> for xART partition </li>
+    <li><b>a</b> for Baseband Data partition </li>
+    <li><b>p</b> for Update partition </li>
+</ul>
+
+Free roles are l, r and 0. </br>
+
+We can't write more volumes with same roles and fstab from filesystem will be ignored. The best way for getting our kernel to boot with second data is patching devicetree to use role 0 on Data partition and create system with one of the two free roles. </p>
+
+<h2> Partitoning </h2>
+
+<p class="cli">newfs_apfs -o role=r -A -v SystemB /dev/disk0s1</p>
+<p class="cli">newfs_apfs -o role=0 -A -v DataB /dev/disk0s1</p>
+
+<h2> Modifying Filesystem </h2>
+
+<p class="cli">mkdir /mnt1/private/xarts</p>
+
+<h2> Patching Bootchain</h2>
+
+<h4>DeviceTree </h4>
+
+<p> You can patch using <a href="https://github.com/Ralph0045/dtree_patcher" class="link">dtree_patcher</a>. </br></br>
+
+Unpack the devicetree:
+<p class="cli">img4 -i DeviceTree* -o dtree.raw</p>
+
+And patch it:
+<p class="cli">dtree_patcher dtree.raw dtree.patched -d (-n)</p>
+
+Pack patched devicetree into img4:
+<p class="cli">img4 -i dtree.patched -o devicetree.img4 -A -M IM4M -T rdtr</p>
+
+
+Boot process is different, we have to send more bootchain. </br> </br>
+Change iBoot boot-partition to 5: </br>
+<img class="align" src="images/Image12.png"></br>
+Search for "com.apple.kernelcache" and change the 0 behind it to 5 (or your System partition-1, disk0s1s1=0, disk0s1s2=1). </br></br>
+
+Pack aopfw, ISP (adc-nike), AudioCodecFirmware (CallanFirmware), Multitouch and Trustcache into img4:
+
+<p class="cli">img4 -i image.im4p -o image.img4 -M IM4M</p>
+
+<h2>First Boot</h2>
+
+Send iBSS, iBEC, applelogo, devicetree and all signed images. Then load them using firmware command:
+
+<p class="cli">irecovery -f image.img4</p>
+<p class="cli">irecovery -c firmware</p>
+
+Send kernelcache and bootx:
+
+<p class="cli">irecovery -f kernelcache.img4</p>
+<p class="cli">irecovery -c bootx</p>
+
+
+<center><a href="index.html" class="link"></b>Dual Booting 64 Bit</a></center></br>
+</div>
+</body>
+</html>

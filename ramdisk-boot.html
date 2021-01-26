@@ -1,0 +1,53 @@
+<html>
+    <link rel="stylesheet" href="general.css"></br>
+    <script src="script.js"></script>
+        <meta charset="Unicode">
+            <head>
+                <title>Dual Booting 64 Bit devices</title>
+            </head>
+<body onload="dark_save()">
+<div class="main">
+    
+    <button id="dark_button" class="btn" onclick="dark()">🌙</button>
+    
+<h2>Ramdisk boot</h2>
+
+
+	</br>It's time to boot the ramdisk and flash the new filesystem:</br>
+
+	<p>Send iBSS, along with iBEC:<p>
+	<p class="cli">irecovery -f iBSS.img4</p>
+	<p class="cli">irecovery -f iBECRamdisk.img4</p>
+
+	<p><b>Note for A10 and newer devices ONLY: Apple unified all iBoot images and as a result booting iBEC is slightly different.</b><p>
+	<p>After sending iBSS, the device will already be in recovery. in order to boot iBEC from iBSS, we must send the go command from iBSS recovery.
+	<p class="cli">irecovery -f iBSS.img4</p>
+	<p class="cli">irecovery -f iBECRamdisk.img4</p>
+	<p class="cli">irecovery -c go</p>
+	<p>Device screen should go blank and light up again once iBEC boots.</p>
+	
+	send and load ramdisk:
+	<p class="cli">irecovery -f ramdisk</p>
+	<p class="cli">irecovery -c ramdisk</p>
+
+	send and load devicetree:
+	<p class="cli">irecovery -f devicetree.img4</p>
+	<p class="cli">irecovery -c devicetree</p>
+
+	<p>If your target system is iOS 12.x or newer, send signed trustcache: (otherwise this can be skipped)<p>
+	<p class="cli">irecovery -f trustcache.img4</p>
+	<p class="cli">irecovery -c firmware</p>
+
+	Send kernelcache and bootx:
+	<p class="cli">irecovery -f kernelcache.img4</p>
+	<p class="cli">irecovery -c bootx</p>
+
+
+	<p>If you did everything correctly ramdisk should boot and run apfs_invert.</br>
+	
+    </br><img class="limit" src="images/Image6.jpeg"></br></br>
+	<center>Next part → <a href="modifying-filesystem.html" class="link"></b>Modifying filesystem</a></center></br>
+    <center><a href="index.html" class="link"></b>Dual Booting 64 Bit</a></center></br>
+</div>
+</body>
+</html>
