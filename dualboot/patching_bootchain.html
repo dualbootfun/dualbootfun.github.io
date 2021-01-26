@@ -75,9 +75,7 @@ Now pack them back into img4:
     Apply it and sign using img4:
 		
     <p class="cli">img4 -i kernelcache.release.* -o kernelcache.img4 -M IM4M -T rkrn -P kc.bpatch</p>
-
-	Now sign trustcache (on iOS 12+) using same apticket:</b>
-	<p class="cli">img4 -i *.im4p -o *.img4 -M IM4M</p>
+	
 	<h3>DeviceTree</h3>
 	<p>Pack devicetree into img4 with rdtr (RestoreDevicetree) tag. The devicetree needs this tag, otherwise iBEC will refuse to see it as valid:</p>
 	<p class="cli">img4 -i devicetree.XXXXX.im4p -o devicetree.img4 -M IM4M -T rdtr</p>
