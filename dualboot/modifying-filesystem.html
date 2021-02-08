@@ -44,7 +44,7 @@ And modify fstab using nano:
 	capacitive home buttons which do not physically click, but instead use the haptic engine to simulate a click.</p>
 	<p>In order to fix haptics on the second operating system, we must copy FUD data restored to the main install.</p>
 	<p>copy FUD data to new system:</p>
-	<p class="cli">cp -av /usr/standalone/firmware/FUD /mnt1/usr/standalone</p>
+	<p class="cli">cp -av /usr/standalone/firmware/FUD /mnt1/usr/standalone/firmware</p>
 
 	<p>In order for the secondary system to see this data as valid, it is also required to copy the main OS apticket (as the FUD images are signed with those)</p>
 
