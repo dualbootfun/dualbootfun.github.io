@@ -17,26 +17,23 @@
 	<p><b>Put in pwned DFU mode and ensure BootROM signature checks have been disabled.</b></p>
 	<p>Send iBSS, along with iBEC: (make sure to send regular iBEC this time!)<p>
 	<p class="cli">irecovery -f iBSS.img4</p>
+	<p><b>Reminder: If no output is given after running this command, run the command again one more time.</b><p></p>
 	<p class="cli">irecovery -f iBEC.img4</p>
 	
-	<p><b>Once again for A10 and newer devices ONLY:</b><p>
+	<p><b>For A10 and newer devices ONLY:</b><p>
 	<p class="cli">irecovery -c go</p>
 
-
-	send and load ramdisk:
-	<p class="cli">irecovery -f ramdisk</p>
-	<p class="cli">irecovery -c ramdisk</p>
-
-	send and load devicetree:
+	Send and load the devicetree:
 	<p class="cli">irecovery -f devicetree.img4</p>
 	<p class="cli">irecovery -c devicetree</p>
 
-	<p>If your target system is iOS 12.x or newer, send signed trustcache: (otherwise this can be skipped)<p>
-	<p class="cli">irecovery -f trustcache.img4</p>
-	<p class="cli">irecovery -c firmware</p>
-
-	Send kernelcache and bootx:
+	Send the kernelcache:
+	<h3>If you're generating keybags, send the patched kernelcache so that fixkeybag can run:</h3>
+	<p class="cli">irecovery -f kernelcacheramdisk.img4</p>
+	<h3>Otherwise, you can send the unpatched kernelcache:</h3>
 	<p class="cli">irecovery -f kernelcache.img4</p>
+
+	Finally, we can boot the device:
 	<p class="cli">irecovery -c bootx</p>
 
 
@@ -45,8 +42,8 @@ If you see “AppleKeyStore: disabling use of effaceable storage, using fake key
 <img class="align" src="images/Image11.png"></br> </br>
     
     Now mount disk0s1s3 and put keybagd in its original place:
-    <p class="cli">mv /mnt1/usr/libexec/keybagd_bak /mnt1/usr/libexec/keybagd</p>
-    We’re done. If you’ve done everything correctly the device should boot in the next boot.</p>
+    <p class="cli">mv /mnt1/usr/libexec/keybagd.bak /mnt1/usr/libexec/keybagd</p>
+    We're done. If you've done everything correctly, then the device should boot into iOS in the next boot.</p>
     <center><a href="index.html" class="link"></b>Dual Booting 64 Bit</a></center></br>
 </div>
 </body>

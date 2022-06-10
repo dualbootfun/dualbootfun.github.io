@@ -14,72 +14,59 @@
 
 <h3>Decrypt iBSS and iBEC:</h3>
 
-<p>Firmware keys and proper component names can be found <a href="https://www.theiphonewiki.com/wiki/firmware" class="link">here</a>.</p> 
+<p>Firmware keys and proper component names can be found <a href="https://www.theiphonewiki.com/wiki/Firmware_Keys" class="link">here</a>.</p> 
 
-<p class="cli">img4 -i iBSS.* -o iBSS.dec -k iv_key</p>
-<p class="cli">img4 -i iBEC.* -o iBEC.dec -k iv_key</p>
+<p class="cli">pyimg4 im4p extract -i iBSS.*.RELEASE.im4p -o iBSS.dec -k &lt;iv+key&gt;</p>
+<p class="cli">pyimg4 im4p extract -i iBEC.*.RELEASE.im4p -o iBEC.dec -k &lt;iv+key&gt;</p>
 
-And patch signature checks using iBoot64Patcher:
+And patch signature checks using Kairos:
 
-<p class="cli">iBoot64Patcher iBSS.dec iBSS.patched</p>
+<p class="cli">kairos iBSS.dec iBSS.patched</p>
 
 <p>Now pack into img4:</p>
 
-<p class="cli">img4 -i iBSS.patched -o iBSS.img4 -M IM4M -A -T ibss</p>
+<p class="cli">pyimg4 im4p create -i iBSS.patched -f ibss -o iBSS.im4p</p>
+<p class="cli">pyimg4 img4 create -p iBSS.im4p -m IM4M -o iBSS.img4</p>
 
 <p><b>Important: we need to create two patched iBEC files; One for booting the custom ramdisk, and one for booting the new system.</b></p>
 
 For booting the second iOS install, iBEC needs an arg which will point it towards the new partition.
 
 Add rd=disk0s1s3 (or your new system partition disk) and -v args to iBEC:
-<p class="cli">iBoot64Patcher iBEC.dec iBEC.patched -b “rd=disk0s1s3 -v”</p>
+<p class="cli">kairos iBEC.dec iBEC.patched -b “rd=disk0s1s3 -v”</p>
+<p>Note: If you don't want to have verbose, you can exclude the -v arg:</p>
+<p class="cli">kairos iBEC.dec iBEC.patched -b “rd=disk0s1s3”</p>
 
 </br><img class="align" src="images/Image9.png"></br>
 
 For booting the custom ramdisk, add rd=md0 restore -v args to iBEC:
-<p class="cli">iBoot64Patcher iBEC.dec iBECramdisk.patched -b “rd=md0 -restore -v”</p>	
+<p class="cli">kairos iBEC.dec iBECramdisk.patched -b “rd=md0 -restore -v”</p>	
 
-Now pack them back into img4: 
+Now pack them back into img4:
+<p class="cli">pyimg4 im4p create -i iBEC.patched -f ibec -o iBEC.im4p</p>
+<p class="cli">pyimg4 im4p create -i iBECramdisk.patched -f ibec -o iBECramdisk.im4p</p>
 
-<p class="cli">img4 -i iBECramdisk.patched -o iBECramdisk.img4 -M IM4M -A -T ibec</p>
-<p class="cli">img4 -i iBEC.patched -o iBEC.img4 -M IM4M -A -T ibec</p>
+<p class="cli">pyimg4 img4 create -p iBEC.im4p -m IM4M -o iBEC.img4</p>
+<p class="cli">pyimg4 img4 create -p iBECramdisk.im4p -m IM4M -o iBECramdisk.img4</p>
 
 <p>Great! now there are two different iBEC files you have created. One for booting the ramdisk, and the other for booting the actual system later on.</p>
 
 <p><b>Note: the rd argument in iBEC stands for "root device", or the target volume iBoot will try to start the system from. md0 always refers to a ramdisk in memory, and disk0s1sX is a disk partition.</b></p>
 
-<h3> Patching Kernelcache:</h3>
+<h3>Kernelcache</h3>
+<p>Pack devicetree into img4 with rkrn (RestoreKernelCache) tag. The kernelcache needs this tag, otherwise iBEC will refuse to see it as valid:</p>
+<p class="cli">pyimg4 im4p extract -i kernelcache.release.* -o kcache.raw --no-decompress</p>
+<p class="cli">pyimg4 im4p create -i kcache.raw -f rkrn -o kernelcache.im4p</p>
+<p class="cli">pyimg4 img4 create -p kernelcache.im4p -m IM4M -o kernelcache.img4</p>
 
-<h4> AMFI </h4>
-    <p>We need to patch amfi in kernel to make the ramdisk load custom binaries.
-    Unpack the kernelcache:
-    <p class="cli">img4 -i kernelcache.* -o kcache.raw</p>
+<h3>DeviceTree</h3>
+<p>Pack devicetree into img4 with rdtr (RestoreDevicetree) tag. The devicetree needs this tag, otherwise iBEC will refuse to see it as valid:</p>
+<p class="cli">pyimg4 im4p extract -i DeviceTree.XXXXap.im4p -o devicetree.raw</p>
+<p class="cli">pyimg4 im4p create -i devicetree.raw -f rdtr -o devicetree.im4p</p>
+<p class="cli">pyimg4 img4 create -p devicetree.im4p -m IM4M -o devicetree.img4</p>
 
-    <h3>Automatically Patching</h3>
-    
-    To simplify dual booting process I wrote a <a href="https://github.com/Ralph0045/Kernel64Patcher" class="link">utility</a> based on patchfinder64 that will automatically patch the kernel:
-    <p class="cli">Kernel64Patcher kcache.raw kcache.patched -a</p>
-    
-    <img class="align" src="images/Image4.png"></br>
+Done!</br>
 
-    Create a patch file: </br>
-    
-    <p class="cli">touch kc.bpatch</p>
-    
-    Note: you can use Hex Fiend to compare the original raw kernelcache and patched kernelcache or this python <a href="https://github.com/mcg29/kerneldiff" class="link">script</a> for creating diff file:
-    
-    <p class="cli">python3 kerneldiff.py kcache.raw kcache.patched</p>
-
-    <img src="images/Image5.png"> </br>
-
-    Apply it and sign using img4:
-		
-    <p class="cli">img4 -i kernelcache.release.* -o kernelcache.img4 -M IM4M -T rkrn -P kc.bpatch</p>
-	
-	<h3>DeviceTree</h3>
-	<p>Pack devicetree into img4 with rdtr (RestoreDevicetree) tag. The devicetree needs this tag, otherwise iBEC will refuse to see it as valid:</p>
-	<p class="cli">img4 -i devicetree.XXXXX.im4p -o devicetree.img4 -M IM4M -T rdtr</p>
-	Done!</br>
 	<center>Next part → <a href="making-ramdisk.html" class="link"></b>Making Ramdisk</a></center></br>
     <center><a href="index.html" class="link"></b>Dual Booting 64 Bit</a></center></br>
 </div>
