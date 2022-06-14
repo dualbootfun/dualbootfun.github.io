@@ -26,7 +26,7 @@
 
 	<p><a href="https://github.com/libimobiledevice/libirecovery" class="link">irecovery</a> by the <a href="https://github.com/libimobiledevice" class="link">libimobiledevice team</a></p>
 
-	<p><a href="https://github.com/ProcursusTeam/ldid" class="link">ldid</a> by <a href="https://twitter.com/saurik" class="link">saurik</a> (modified fork by the <a href="https://twitter.com/ProcursusTeam" class="link">Procursus team</a></p>
+	<p><a href="https://github.com/ProcursusTeam/ldid" class="link">ldid</a> by <a href="https://twitter.com/saurik" class="link">saurik</a> (modified fork by the <a href="https://twitter.com/ProcursusTeam" class="link">Procursus team</a>)</p>
 
 	<h4>A tool to place your device into pwned DFU mode.</h4>
 	<p>For macOS:</p>
@@ -55,7 +55,7 @@
 
 	<p>After the string "ECID: " will be the device's ECID in hex, and after the string "MODEL: " will be the device's boardconfig (d101ap in this case).</p>
 
-	<p>Next, extract the IM4M from your SHSH(2) Blob using <a href="../source/extract_im4m.py" class="link">this script</a>. This file will be critical for signing the bootchain later on:</p>
+	<p>Next, extract the IM4M from your SHSH(2) Blob using <a href="code/extract_im4m.py" class="link">this script</a>. This file will be critical for signing the bootchain later on:</p>
 
 	<p class="cli">python3 extract_im4m.py *.shsh2 IM4M</p>
     <center>Next part → <a href="partitioning.html" class="link"></b>Partitioning</a></center></br>

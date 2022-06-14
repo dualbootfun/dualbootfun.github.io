@@ -20,9 +20,9 @@
 	<p>Unpack original ramdisk into raw dmg:<p>
 	<p class="cli">pyimg4 im4p extract -i xxx.xxxxx.xxx.dmg -o ramdisk.dmg</p>
     And mount it:
-    <p class="cli">export TMPDIR=$(mkdir -p)</p>
+    <p class="cli">export TMPDIR=$(mktemp -d)</p>
     <p class="cli">hdiutil attach ramdisk.dmg -mountpoint $TMPDIR/ramdisk</p>
-    Compile <a href="https://github.com/dualbootfun/dualbootfun.github.io/blob/master/source/restored-hax.c" class="link">restored-hax</a> (thanks to <a href="https://twitter.com/b1n4r1b01" class="link">@b1n4r1b01</a>) and sign it using ldid (iOS 10) or ldid2 (iOS 11+):
+    Compile <a href="code/restored-hax.c" class="link">restored-hax</a> (thanks to <a href="https://twitter.com/b1n4r1b01" class="link">@b1n4r1b01</a>) and sign it using ldid (iOS 10) or ldid2 (iOS 11+):
     <p class="cli">xcrun -sdk iphoneos clang -arch arm64 restored-hax.c -o restored_hax</p>
 	<p class="cli">ldid(2) -S restored_hax</p>
     Note: don't forget to change disk0s1s3 in source code if new system is a different partition.</br>
