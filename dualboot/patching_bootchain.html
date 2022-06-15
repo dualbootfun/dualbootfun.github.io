@@ -16,8 +16,8 @@
 
 <p>Firmware keys and proper component names can be found <a href="https://www.theiphonewiki.com/wiki/Firmware_Keys" class="link">here</a>.</p> 
 
-<p class="cli">pyimg4 im4p extract -i iBSS.*.RELEASE.im4p -o iBSS.dec -k &lt;iv+key&gt;</p>
-<p class="cli">pyimg4 im4p extract -i iBEC.*.RELEASE.im4p -o iBEC.dec -k &lt;iv+key&gt;</p>
+<p class="cli">pyimg4 im4p extract -i iBSS.*.RELEASE.im4p -o iBSS.dec --iv &lt;iv&gt; --key &lt;key&gt;</p>
+<p class="cli">pyimg4 im4p extract -i iBEC.*.RELEASE.im4p -o iBEC.dec --iv &lt;iv&gt; --key &lt;key&gt;</p>
 
 And patch signature checks using Kairos:
 
@@ -40,14 +40,14 @@ Add rd=disk0s1s3 (or your new system partition disk) and -v args to iBEC:
 </br><img class="align" src="images/Image9.png"></br>
 
 For booting the custom ramdisk, add rd=md0 restore -v args to iBEC:
-<p class="cli">kairos iBEC.dec iBECramdisk.patched -b “rd=md0 -restore -v”</p>	
+<p class="cli">kairos iBEC.dec iBEC.ramdisk.patched -b “rd=md0 -restore -v”</p>	
 
 Now pack them back into img4:
 <p class="cli">pyimg4 im4p create -i iBEC.patched -f ibec -o iBEC.im4p</p>
-<p class="cli">pyimg4 im4p create -i iBECramdisk.patched -f ibec -o iBECramdisk.im4p</p>
+<p class="cli">pyimg4 im4p create -i iBEC.ramdisk.patched -f ibec -o iBEC.ramdisk.im4p</p>
 
 <p class="cli">pyimg4 img4 create -p iBEC.im4p -m IM4M -o iBEC.img4</p>
-<p class="cli">pyimg4 img4 create -p iBECramdisk.im4p -m IM4M -o iBECramdisk.img4</p>
+<p class="cli">pyimg4 img4 create -p iBEC.ramdisk.im4p -m IM4M -o iBEC.ramdisk.img4</p>
 
 <p>Great! now there are two different iBEC files you have created. One for booting the ramdisk, and the other for booting the actual system later on.</p>
 

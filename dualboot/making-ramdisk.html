@@ -20,18 +20,18 @@
 	<p>Unpack original ramdisk into raw dmg:<p>
 	<p class="cli">pyimg4 im4p extract -i xxx.xxxxx.xxx.dmg -o ramdisk.dmg</p>
     And mount it:
-    <p class="cli">export TMPDIR=$(mktemp -d)</p>
-    <p class="cli">hdiutil attach ramdisk.dmg -mountpoint $TMPDIR/ramdisk</p>
+    <p class="cli">export RAMDISK=$(mktemp -d)</p>
+    <p class="cli">hdiutil attach ramdisk.dmg -mountpoint $RAMDISK</p>
     Compile <a href="code/restored-hax.c" class="link">restored-hax</a> (thanks to <a href="https://twitter.com/b1n4r1b01" class="link">@b1n4r1b01</a>) and sign it using ldid:
     <p class="cli">xcrun -sdk iphoneos clang -arch arm64 restored-hax.c -o restored_hax</p>
-	<p class="cli">ldid(2) -S restored_hax</p>
+	<p class="cli">ldid -S restored_hax</p>
     Note: don't forget to change disk0s1s3 in source code if new system is a different partition.</br>
     </br>Rename original restored_external:
-    <p class="cli">mv $TMPDIR/ramdisk/usr/local/bin/restored_external $TMPDIR/ramdisk/usr/local/bin/restored_external.bak</p>
+    <p class="cli">mv $RAMDISK/usr/local/bin/restored_external $RAMDISK/usr/local/bin/restored_external.bak</p>
     And replace it with the compiled binary:
-    <p class="cli">cp -a restored_hax $TMPDIR/ramdisk/usr/local/bin/restored_external</p>
+    <p class="cli">cp -a restored_hax $RAMDISK/usr/local/bin/restored_external</p>
     Don't forget to unmount the ramdisk:
-    <p class="cli">hdiutil detach $TMPDIR/ramdisk</p>
+    <p class="cli">hdiutil detach $RAMDISK</p>
     Now pack ramdisk into img4:
     <p class="cli">pyimg4 im4p create -i ramdisk.dmg -f rdsk -o ramdisk.im4p</p>
     <p class="cli">pyimg4 img4 create -p ramdisk.im4p -m IM4M -o ramdisk.img4</p>
@@ -66,12 +66,12 @@
     <h3>Now pack into img4:</h3>
 
     <h4>A7-A9</h4>
-    <p class="cli">pyimg4 im4p create -i kcache.patched -f rkrn --extra kpp.bin --lzss -o kernelcacheramdisk.im4p</p>
-    <p class="cli">pyimg4 img4 create -p kernelcacheramdisk.im4p -m IM4M -o kernelcacheramdisk.img4</p>
+    <p class="cli">pyimg4 im4p create -i kcache.patched -f rkrn --extra kpp.bin --lzss -o kernelcache.ramdisk.im4p</p>
+    <p class="cli">pyimg4 img4 create -p kernelcache.ramdisk.im4p -m IM4M -o kernelcache.ramdisk.img4</p>
 
     <h4>A10-A11</h4>
-    <p class="cli">pyimg4 im4p create -i kcache.patched -o kernelcacheramdisk.im4p -f rkrn --lzfse</p>
-    <p class="cli">pyimg4 img4 create -p kernelcacheramdisk.im4p -m IM4M -o kernelcacheramdisk.img4</p>
+    <p class="cli">pyimg4 im4p create -i kcache.patched -o kernelcache.ramdisk.im4p -f rkrn --lzfse</p>
+    <p class="cli">pyimg4 img4 create -p kernelcache.ramdisk.im4p -m IM4M -o kernelcache.ramdisk.img4</p>
 
     <center>Next part → <a href="ramdisk-boot.html" class="link"></b>Ramdisk Boot<a></center></br>
     <center><a href="index.html" class="link"></b>Dual Booting 64 Bit</a></center></br>
