@@ -7,57 +7,57 @@
             </head>
 <body onload="dark_save()">
 <div class="main">
-    
+
     <button id="dark_button" class="btn" onclick="dark()">🌙</button>
-	
+
 	<h2>First Steps</h2>
-	
-	<p>Most tools are designed to be used on MacOS, however if compiled from source they may be able to run on other operating systems.</p> 
+
+	<p>Most tools are designed to be used on macOS, however if compiled from source they may be able to run on other operating systems.</p> 
 
 	<h4>Download and compile:</h4>
 
-	<p><a href="https://github.com/xerub/img4lib" class="link">img4lib</a> (img4) by @xerub</p> 
-	
-	<p><a href="https://github.com/tihmstar/img4tool" class="link">img4tool</a> by @Tihmstar</p> 
-	
-	<p><a href="https://github.com/tihmstar/iBoot64Patcher" class="link">iBoot64Patcher</a> by @Tihmstar</p> 
-	
-	<p><a href="https://github.com/tihmstar/tsschecker" class="link">tsschecker</a> by @Tihmstar</p> 
-	
-	<p><a href="https://github.com/Ralph0045/Kernel64Patcher" class="link">Kernel64Patcher</a> by @Ralph0045</p> 	
-	
-	<p><a href="https://github.com/libimobiledevice/libirecovery" class="link">irecovery</a> from Libimobiledevice</p>
-	
-	<h4>Any Utility to place the device into pwned DFU mode.</h4>
-	<p>For example:</p>
-	<li><b>ipwndfu fork for your device that supports removing BootROM signature checks</b></li>
-	
-	<li><b><a href="https://github.com/0x7ff/eclipsa" class="link">eclipsa</a> for A8(x)/A9 devices</b></lI>		
-	
-	<h4>The target firmware (iOS version) which can be found <a href="https://ipsw.me/" class="link">here</a></h4>
-	
+	<p><a href="https://pypi.org/project/pyimg4/" class="link">PyIMG4</a> by <a href="https://twitter.com/_m1sta" class="link">m1sta</a></p> 
+
+	<p><a href="https://github.com/dayt0n/Kairos" class="link">Kairos</a> by <a href="https://twitter.com/daytonhasty" class="link">dayt0n</a></p> 
+
+	<p><a href="https://github.com/1Conan/tsschecker" class="link">tsschecker</a> by <a href="https://twitter.com/tihmstar" class="link">tihmstar</a> (modified fork by <a href="https://twitter.com/1ConanEdogawa" class="link">1Conan</a>)</p> 
+
+	<p><a href="https://github.com/Ralph0045/Kernel64Patcher" class="link">Kernel64Patcher</a> by <a href="https://twitter.com/Ralph0045" class="link">Ralph0045</a></p> 	
+
+	<p><a href="https://github.com/libimobiledevice/libirecovery" class="link">irecovery</a> by the <a href="https://github.com/libimobiledevice" class="link">libimobiledevice team</a></p>
+
+	<p><a href="https://github.com/ProcursusTeam/ldid" class="link">ldid</a> by <a href="https://twitter.com/saurik" class="link">saurik</a> (modified fork by the <a href="https://twitter.com/ProcursusTeam" class="link">Procursus team</a>)</p>
+
+	<h4>A tool to place your device into pwned DFU mode.</h4>
+	<p>For macOS:</p>
+	<li><b><a href="https://github.com/0x7ff/gaster" class="link">gaster</a> for A7-A11 devices</b></lI>
+
+	<p>For Linux:</p>
+	<li><b>An ipwndfu fork for your device that supports patching BootROM signature checks</b></li>
+
+	<h4>The target firmware (iOS version) which can be found <a href="https://ipsw.me" class="link">here</a></h4>
+
 	<p>Apple device software comes in the form of zip files with a .ipsw extension. "ipsw" is an abbreviation for iPhone/iPod/iPad (ip) and software (sw).</p>
-	
+
 	<h4>SHSH(2) (apticket) files</h4>
-	
+
 	<p>SHSH signatures are required in order to properly build img4 files that the BootROM will accept from pwned DFU mode. Unless you have them already, you can save them with tsschecker (or other public tools.)
 	<p>Note: ticket version does not have to match target iBoot version.</p>
-	<p class="cli">tsschecker -d iPhoneX,X -l -e ECID -B boardconfig -l -s</p>
-	
-	<p>If you do not know your ECID or boardconfig, connect the device in recovery mode and execute:</p>
-	
-	<p class="cli">irecovery -s</p>
-	
-	<p>which will give output similar to this: 
-	
-	</br><img class="align" src="images/recovery.png"></br>
-	
-	<p>After the string "ECID:" will be the device's ECID in hex, and Board Configuration (boardconfig) will be in parentheses after "Local Boot" (d201ap) in this case.</p> 
+	<p class="cli">tsschecker -d iPhoneX,X -B boardconfig -e ECID -l -s</p>
 
-	
-	<p>Next, convert your saved shsh2 file for your device to raw IM4M with img4tool. This file will be critical for signing components later on:</p>
-	
-	<p class="cli">img4tool -e -s *.shsh2 -m IM4M</p>
+	<p>If you do not know your ECID or boardconfig, connect the device in DFU or Recovery mode and execute:</p>
+
+	<p class="cli">irecovery -q</p>
+
+	<p>which will give an output similar to this: 
+
+	</br><img class="align" src="images/recovery.png"></br>
+
+	<p>After the string "ECID: " will be the device's ECID in hex, and after the string "MODEL: " will be the device's boardconfig (d101ap in this case).</p>
+
+	<p>Next, extract the IM4M from your SHSH(2) Blob using <a href="code/extract_im4m.py" class="link">this script</a>. This file will be critical for signing the bootchain later on:</p>
+
+	<p class="cli">python3 extract_im4m.py *.shsh2 IM4M</p>
     <center>Next part → <a href="partitioning.html" class="link"></b>Partitioning</a></center></br>
     <center><a href="index.html" class="link"></b>Dual Booting 64 Bit</a></center></br>
 </div>

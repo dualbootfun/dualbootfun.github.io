@@ -1,0 +1,74 @@
+<html>
+    <link rel="stylesheet" href="general.css"></br>
+    <script src="script.js"></script>
+        <meta charset="Unicode">
+            <head>
+                <title>Dual Booting 64 Bit devices</title>
+            </head>
+<body onload="dark_save()">
+<div class="main">
+    
+    <button id="dark_button" class="btn" onclick="dark()">🌙</button>
+    
+<h2>Patching Bootchain</h2>
+
+<h3>Decrypt iBSS and iBEC:</h3>
+
+<p>Firmware keys and proper component names can be found <a href="https://www.theiphonewiki.com/wiki/Firmware_Keys" class="link">here</a>.</p> 
+
+<p class="cli">pyimg4 im4p extract -i iBSS.*.RELEASE.im4p -o iBSS.dec --iv &lt;iv&gt; --key &lt;key&gt;</p>
+<p class="cli">pyimg4 im4p extract -i iBEC.*.RELEASE.im4p -o iBEC.dec --iv &lt;iv&gt; --key &lt;key&gt;</p>
+
+And patch signature checks using Kairos:
+
+<p class="cli">kairos iBSS.dec iBSS.patched</p>
+
+<p>Now pack into img4:</p>
+
+<p class="cli">pyimg4 im4p create -i iBSS.patched -f ibss -o iBSS.im4p</p>
+<p class="cli">pyimg4 img4 create -p iBSS.im4p -m IM4M -o iBSS.img4</p>
+
+<p><b>Important: we need to create two patched iBEC files; One for booting the custom ramdisk, and one for booting the new system.</b></p>
+
+For booting the second iOS install, iBEC needs an arg which will point it towards the new partition.
+
+Add rd=disk0s1s3 (or your new system partition disk) and -v args to iBEC:
+<p class="cli">kairos iBEC.dec iBEC.patched -b “rd=disk0s1s3 -v”</p>
+<p>Note: If you don't want to have verbose, you can exclude the -v arg:</p>
+<p class="cli">kairos iBEC.dec iBEC.patched -b “rd=disk0s1s3”</p>
+
+</br><img class="align" src="images/Image9.png"></br>
+
+For booting the custom ramdisk, add rd=md0 restore -v args to iBEC:
+<p class="cli">kairos iBEC.dec iBEC.ramdisk.patched -b “rd=md0 -restore -v”</p>	
+
+Now pack them back into img4:
+<p class="cli">pyimg4 im4p create -i iBEC.patched -f ibec -o iBEC.im4p</p>
+<p class="cli">pyimg4 im4p create -i iBEC.ramdisk.patched -f ibec -o iBEC.ramdisk.im4p</p>
+
+<p class="cli">pyimg4 img4 create -p iBEC.im4p -m IM4M -o iBEC.img4</p>
+<p class="cli">pyimg4 img4 create -p iBEC.ramdisk.im4p -m IM4M -o iBEC.ramdisk.img4</p>
+
+<p>Great! now there are two different iBEC files you have created. One for booting the ramdisk, and the other for booting the actual system later on.</p>
+
+<p><b>Note: the rd argument in iBEC stands for "root device", or the target volume iBoot will try to start the system from. md0 always refers to a ramdisk in memory, and disk0s1sX is a disk partition.</b></p>
+
+<h3>Kernelcache</h3>
+<p>Pack devicetree into img4 with rkrn (RestoreKernelCache) tag. The kernelcache needs this tag, otherwise iBEC will refuse to see it as valid:</p>
+<p class="cli">pyimg4 im4p extract -i kernelcache.release.* -o kcache.raw --no-decompress</p>
+<p class="cli">pyimg4 im4p create -i kcache.raw -f rkrn -o kernelcache.im4p</p>
+<p class="cli">pyimg4 img4 create -p kernelcache.im4p -m IM4M -o kernelcache.img4</p>
+
+<h3>DeviceTree</h3>
+<p>Pack devicetree into img4 with rdtr (RestoreDevicetree) tag. The devicetree needs this tag, otherwise iBEC will refuse to see it as valid:</p>
+<p class="cli">pyimg4 im4p extract -i DeviceTree.XXXXap.im4p -o devicetree.raw</p>
+<p class="cli">pyimg4 im4p create -i devicetree.raw -f rdtr -o devicetree.im4p</p>
+<p class="cli">pyimg4 img4 create -p devicetree.im4p -m IM4M -o devicetree.img4</p>
+
+Done!</br>
+
+	<center>Next part → <a href="making-ramdisk.html" class="link"></b>Making Ramdisk</a></center></br>
+    <center><a href="index.html" class="link"></b>Dual Booting 64 Bit</a></center></br>
+</div>
+</body>
+</html>
